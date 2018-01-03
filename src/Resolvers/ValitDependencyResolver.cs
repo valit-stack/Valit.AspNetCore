@@ -1,4 +1,6 @@
 using System;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace Valit.AspNetCore.Resolvers
 {
@@ -12,6 +14,6 @@ namespace Valit.AspNetCore.Resolvers
         }
 
         public TImplementation Resolve<TImplementation>() where TImplementation : class
-            => _serviceProvider.GetService(typeof(TImplementation)) as TImplementation;
+            => _serviceProvider.GetService<TImplementation>();
     }
 }
