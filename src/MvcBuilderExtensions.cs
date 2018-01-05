@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Valit.AspNetCore.Executors;
+using Valit.AspNetCore.Factories;
 using Valit.AspNetCore.ModelValidatorProviders;
 using Valit.AspNetCore.Resolvers;
 
@@ -7,10 +8,15 @@ namespace Valit.AspNetCore
 {
     public static class MvcBuilderExtensions
     {
-        public static IMvcBuilder AddValit<T>(this IMvcBuilder builder)
+        public static IMvcBuilder AddValit(this IMvcBuilder builder)
         {
-            builder.Services.Scan(s => s.FromAssemblyOf<T>().AddClasses(c => c.AssignableTo(typeof(IValitator<>))).AsImplementedInterfaces());
+            builder.Services.Scan(s => s.FromApplicationDependencies()
+                .AddClasses(c => c.AssignableTo(typeof(IValitator<>)))
+                .AsImplementedInterfaces()
+                .WithSingletonLifetime());
+
             builder.Services.AddTransient<IValitDependencyResolver, ValitDependencyResolver>();
+            builder.Services.AddTransient<IValitatorFactory, ValitatorFactory>();
             builder.Services.AddTransient<IValitatorExecutor, ValitatorExecutor>();
             builder.Services.AddTransient<ModelValitatorProvider, ModelValitatorProvider>();
 

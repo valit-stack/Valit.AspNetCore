@@ -8,5 +8,9 @@ namespace Valit.AspNetCore.Extensions
             =>  target.GetMethod(methodName)
                 .MakeGenericMethod(genericType)
                 .Invoke(@object, parameters);
+
+        public static object InvokeMethod(this Type target, string methodName, object @object, params object[] parameters)
+            => target.GetMethod(methodName)
+                .Invoke(@object, parameters);
     }
 }

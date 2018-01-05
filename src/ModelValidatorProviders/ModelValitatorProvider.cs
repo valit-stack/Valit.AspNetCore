@@ -7,11 +7,11 @@ namespace Valit.AspNetCore.ModelValidatorProviders
 {
 	internal class ModelValitatorProvider : IModelValidatorProvider
 	{
-        private readonly IValitatorExecutor _valitatorEecutor;
+        private readonly IValitatorExecutor _valitatorExecutor;
 
         public ModelValitatorProvider(IValitatorExecutor valitatorExecutor)
         {
-            _valitatorEecutor = valitatorExecutor;
+            _valitatorExecutor = valitatorExecutor;
         }
         
 		public void CreateValidators(ModelValidatorProviderContext context)
@@ -23,7 +23,7 @@ namespace Valit.AspNetCore.ModelValidatorProviders
 
             var validatorItem = new ValidatorItem
             {
-                Validator = new ModelValitator(_valitatorEecutor),
+                Validator = new ModelValitator(_valitatorExecutor),
                 IsReusable = true
             };
 

@@ -1,27 +1,26 @@
-using System;
 using Valit.AspNetCore.Extensions;
-using Valit.AspNetCore.Resolvers;
+using Valit.AspNetCore.Factories;
 
 namespace Valit.AspNetCore.Executors
 {
     internal class ValitatorExecutor : IValitatorExecutor
     {
-        private readonly IValitDependencyResolver _valitDependencyResovler;
+        private readonly IValitatorFactory _valitatorFactory;
 
-        public ValitatorExecutor(IValitDependencyResolver valitDependencyResovler)
+        public ValitatorExecutor(IValitatorFactory valitatorFactory)
         {
-            _valitDependencyResovler = valitDependencyResovler;
+            _valitatorFactory = valitatorFactory;
         }
 
         public IValitResult ExecuteValidation(object model)
         {
             var modelType = model.GetType();
-            var resolverType = _valitDependencyResovler.GetType();
+            var valitatorFactoryType = _valitatorFactory.GetType();
 
-            var modelValitator = resolverType.InvokeGenericMethod(nameof(IValitDependencyResolver.Resolve), modelType, _valitDependencyResovler);
+            var modelValitator = valitatorFactoryType.InvokeGenericMethod(nameof(IValitatorFactory.GetValitator), modelType, _valitatorFactory);
             var modelValitatorType = modelValitator.GetType();
 
-            return (IValitResult) modelValitatorType.InvokeGenericMethod(nameof(IValitator<object>.Validate), modelType, modelValitator, model);
+            return (IValitResult) modelValitatorType.InvokeMethod(nameof(IValitator<object>.Validate), modelValitator, model, null);
         }       
     }
 }
