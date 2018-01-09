@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace Valit.AspNetCore.Resolvers
 {
     internal class ValitDependencyResolver : IValitDependencyResolver

@@ -13,7 +13,7 @@ namespace Valit.AspNetCore
         public static IMvcBuilder AddValit(this IMvcBuilder builder)
             => builder.AddValit(ctx =>
             {
-
+                ctx.WithStrategy(picker => picker.Complete);
             });
 
         public static IMvcBuilder AddValit(this IMvcBuilder builder, Action<IValitAspNetContext> contextFunc)
@@ -26,7 +26,7 @@ namespace Valit.AspNetCore
                 .AsImplementedInterfaces()
                 .WithSingletonLifetime());
 
-            builder.Services.AddSingleton(context);
+            builder.Services.AddSingleton<IValitAspNetContext>(context);
             builder.Services.AddTransient<IValitDependencyResolver, ValitDependencyResolver>();
             builder.Services.AddTransient<IValitatorFactory, ValitatorFactory>();
             builder.Services.AddTransient<IValitatorExecutor, ValitatorExecutor>();
