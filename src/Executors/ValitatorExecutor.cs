@@ -12,7 +12,7 @@ namespace Valit.AspNetCore.Executors
             _valitatorFactory = valitatorFactory;
         }
 
-        public IValitResult ExecuteValidation(object model)
+        public IValitResult ExecuteValidation(object model, IValitStrategy strategy)
         {
             var modelType = model.GetType();
             var valitatorFactoryType = _valitatorFactory.GetType();
@@ -20,7 +20,7 @@ namespace Valit.AspNetCore.Executors
             var modelValitator = valitatorFactoryType.InvokeGenericMethod(nameof(IValitatorFactory.GetValitator), modelType, _valitatorFactory);
             var modelValitatorType = modelValitator.GetType();
 
-            return (IValitResult) modelValitatorType.InvokeMethod(nameof(IValitator<object>.Validate), modelValitator, model, null);
+            return (IValitResult) modelValitatorType.InvokeMethod(nameof(IValitator<object>.Validate), modelValitator, model, strategy);
         }       
     }
 }

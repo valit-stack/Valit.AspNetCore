@@ -10,9 +10,16 @@ namespace Valit.AspNetCore
 {
     public static class MvcBuilderExtensions
     {
-        public static IMvcBuilder AddValit(this IMvcBuilder builder, Func<IValitAspNetContext, IValitAspNetContext> contextFunc)
+        public static IMvcBuilder AddValit(this IMvcBuilder builder)
+            => builder.AddValit(ctx =>
+            {
+
+            });
+
+        public static IMvcBuilder AddValit(this IMvcBuilder builder, Action<IValitAspNetContext> contextFunc)
         {
-            var context = contextFunc(new ValitAspNetContext());
+            var context = new ValitAspNetContext();
+            contextFunc(context);
 
             builder.Services.Scan(s => s.FromApplicationDependencies()
                 .AddClasses(c => c.AssignableTo(typeof(IValitator<>)))

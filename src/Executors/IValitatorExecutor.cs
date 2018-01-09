@@ -2,6 +2,6 @@ namespace Valit.AspNetCore.Executors
 {
     internal interface IValitatorExecutor
     {
-        IValitResult ExecuteValidation(object model);
+        IValitResult ExecuteValidation(object model, IValitStrategy strategy);
     }
 }

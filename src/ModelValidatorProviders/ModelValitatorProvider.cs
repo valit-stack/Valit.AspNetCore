@@ -8,10 +8,12 @@ namespace Valit.AspNetCore.ModelValidatorProviders
 	internal class ModelValitatorProvider : IModelValidatorProvider
 	{
         private readonly IValitatorExecutor _valitatorExecutor;
+        private readonly IValitAspNetContext _valitAspNetContext;
 
-        public ModelValitatorProvider(IValitatorExecutor valitatorExecutor)
+        public ModelValitatorProvider(IValitatorExecutor valitatorExecutor, IValitAspNetContext valitAspNetContext)
         {
             _valitatorExecutor = valitatorExecutor;
+            _valitAspNetContext = valitAspNetContext;
         }
         
 		public void CreateValidators(ModelValidatorProviderContext context)
@@ -23,7 +25,7 @@ namespace Valit.AspNetCore.ModelValidatorProviders
 
             var validatorItem = new ValidatorItem
             {
-                Validator = new ModelValitator(_valitatorExecutor),
+                Validator = new ModelValitator(_valitatorExecutor, _valitAspNetContext),
                 IsReusable = true
             };
 
