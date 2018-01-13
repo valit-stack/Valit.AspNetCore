@@ -9,6 +9,7 @@ using Shouldly;
 using Valit.AspNetCore.Tests.Http;
 using Valit.AspNetCore.Tests.IntegrationApp;
 using Valit.AspNetCore.Tests.IntegrationApp.Models;
+using Valit.AspNetCore.Tests.IntegrationApp.Validators;
 using Xunit;
 
 namespace Valit.AspNetCore.Tests
@@ -28,6 +29,22 @@ namespace Valit.AspNetCore.Tests
             var errors = await _api.ValidateAsync(validUserModel);
 
             errors.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public async Task Api_Returns_One_Element_Collection_If_Invalid_Model_Is_Given()
+        {
+            var invalidUserModel = new UserModel
+            {
+                Id = Guid.NewGuid(),
+                Email = "user_test_com",
+                Age = 24
+            };
+
+            var errors = (await _api.ValidateAsync(invalidUserModel)).ToArray();
+
+            errors.Length.ShouldBe(1);
+            errors.First().ShouldBe(ErrorMessages.InvalidEmail);
         }
 
 
