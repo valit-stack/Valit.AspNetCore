@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using RestEase;
 using Valit.AspNetCore.Tests.IntegrationApp.Models;
 
 namespace Valit.AspNetCore.Tests.Http
 {
     public interface IValitIntegrationAppApi
     {
-         Task<IEnumerable<string>> ValidateAsync(UserModel user);
+        [Post("/api/Users/Validate")]
+        Task<IEnumerable<string>> ValidateAsync([Body] UserModel user);
     }
 }

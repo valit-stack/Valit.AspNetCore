@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using RestEase;
+using Shouldly;
 using Valit.AspNetCore.Tests.Http;
 using Valit.AspNetCore.Tests.IntegrationApp;
 using Valit.AspNetCore.Tests.IntegrationApp.Models;
@@ -13,8 +15,8 @@ namespace Valit.AspNetCore.Tests
 {
     public class FailFast_Integration_Tests
     {
-
-        public async Task Api_Returns_Empty_Collection_If_Valid_Model_Is_Sent()
+        [Fact]
+        public async Task Api_Returns_Empty_Collection_If_Valid_Model_Is_Given()
         {
             var validUserModel = new UserModel
             {
@@ -25,7 +27,7 @@ namespace Valit.AspNetCore.Tests
 
             var errors = await _api.ValidateAsync(validUserModel);
 
-            
+            errors.ShouldBeEmpty();
         }
 
 
@@ -39,7 +41,7 @@ namespace Valit.AspNetCore.Tests
             var webHostBuilder = new WebHostBuilder().UseStartup<FailFastStartup>();
 
             _server = new TestServer(webHostBuilder);
-            _api = RestClient.For<IValitIntegrationAppApi>("http://localhost:5000");
+            _api = RestClient.For<IValitIntegrationAppApi>(_server.CreateClient());
         }
 
 #endregion        
